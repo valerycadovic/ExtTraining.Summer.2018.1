@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using NUnit.Framework;
+using MazeLibrary;
 
 namespace MazeLibrary.Tests
 {
     [TestFixture]
     public class MazeSolverTests
     {
-        private readonly int[] startXs = { 1, 0, 3, 0 };
+        private readonly int[] startXs = { 3, 0, 1, 0 };
 
-        private readonly int[] startYs = { 0, 1, 5, 4 };
+        private readonly int[] startYs = { 5, 4, 0, 1 };
 
         private readonly int[][,] sourceData = new int[][,]
         {
@@ -59,7 +64,7 @@ namespace MazeLibrary.Tests
                 { -1,  0, -1, -1, -1, -1,  0, -1,  0, -1,  0, -1 },
                 { -1,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0, -1 },
                 { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 }
-            }          
+            }
         };
 
         private readonly int[][,] result = new int[][,]
@@ -137,12 +142,38 @@ namespace MazeLibrary.Tests
 
                 if (!MatrixAreEquals(solver.MazeWithPass(), result[i]))
                 {
-                    //TODO
+                    Assert.Fail();
                 }
             }
+            Assert.Pass();
         }
 
-        private static bool MatrixAreEquals(int[,] lhs, int[,] rhs) => throw new NotImplementedException();
+        private static bool MatrixAreEquals(int[,] lhs, int[,] rhs)
+        {
+            int lhsRows = lhs.GetUpperBound(0) + 1;
+            int lhsColumns = lhs.Length / lhsRows;
+            int rhsRows = rhs.GetUpperBound(0) + 1;
+            int rhsColumns = rhs.Length / rhsRows;
+
+            if ((lhsRows != rhsRows) || (lhsColumns != rhsColumns))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < lhsRows; i++)
+            {
+                for (int j = 0; j < lhsColumns; j++)
+                {
+                    if (lhs[i, j] != rhs[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
 
     }
 }
+
